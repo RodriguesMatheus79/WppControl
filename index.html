@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Controle de Leads</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">CL</span>
+          <div>
+            <h1>Controle de Leads</h1>
+            <p>Abordagens, ofertas e proximos passos</p>
+          </div>
+        </div>
+
+        <nav class="status-nav" aria-label="Resumo por etapa">
+          <button class="status-chip active" data-filter-status="todos">
+            <span>Todos</span>
+            <strong id="countTodos">0</strong>
+          </button>
+          <button class="status-chip" data-filter-status="primeiro-contato">
+            <span>Primeiro ctt</span>
+            <strong id="countPrimeiroContato">0</strong>
+          </button>
+          <button class="status-chip" data-filter-status="oferta-enviada">
+            <span>Oferta enviada</span>
+            <strong id="countOfertaEnviada">0</strong>
+          </button>
+          <button class="status-chip" data-filter-status="oferta-desconto">
+            <span>Oferta desconto</span>
+            <strong id="countOfertaDesconto">0</strong>
+          </button>
+          <button class="status-chip" data-filter-status="follow-up">
+            <span>Follow-up</span>
+            <strong id="countFollowUp">0</strong>
+          </button>
+          <button class="status-chip" data-filter-status="fechado">
+            <span>Fechado</span>
+            <strong id="countFechado">0</strong>
+          </button>
+          <button class="status-chip" data-filter-status="perdido">
+            <span>Perdido</span>
+            <strong id="countPerdido">0</strong>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div class="search-wrap">
+            <label for="searchInput">Buscar</label>
+            <input id="searchInput" type="search" placeholder="Nome, telefone, origem ou observacao" />
+          </div>
+          <div class="toolbar">
+            <button class="icon-button" id="exportButton" type="button" title="Exportar leads" aria-label="Exportar leads">
+              <span aria-hidden="true">⇩</span>
+            </button>
+            <button class="icon-button" id="importButton" type="button" title="Importar leads" aria-label="Importar leads">
+              <span aria-hidden="true">⇧</span>
+            </button>
+            <button class="primary-button" id="newLeadButton" type="button">Novo lead</button>
+          </div>
+          <input id="importFile" type="file" accept="application/json" hidden />
+        </header>
+
+        <section class="metrics" aria-label="Indicadores">
+          <div class="metric">
+            <span>Total</span>
+            <strong id="metricTotal">0</strong>
+          </div>
+          <div class="metric">
+            <span>Abertos</span>
+            <strong id="metricOpen">0</strong>
+          </div>
+          <div class="metric">
+            <span>Para hoje</span>
+            <strong id="metricToday">0</strong>
+          </div>
+          <div class="metric">
+            <span>Conversao</span>
+            <strong id="metricConversion">0%</strong>
+          </div>
+        </section>
+
+        <section class="lead-board">
+          <div class="board-head">
+            <div>
+              <h2>Leads</h2>
+              <p id="resultSummary">Nenhum lead cadastrado</p>
+            </div>
+            <select id="sortSelect" aria-label="Ordenar leads">
+              <option value="updated-desc">Atualizados primeiro</option>
+              <option value="next-asc">Proximo contato</option>
+              <option value="name-asc">Nome A-Z</option>
+              <option value="status-asc">Etapa</option>
+            </select>
+          </div>
+
+          <div class="lead-list" id="leadList" aria-live="polite"></div>
+
+          <div class="empty-state" id="emptyState">
+            <h3>Comece pelo primeiro contato</h3>
+            <p>Cadastre um lead para acompanhar etapa, telefone, ultimo toque e proxima abordagem.</p>
+            <button class="primary-button" type="button" data-empty-new>Novo lead</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="leadDialog">
+      <form id="leadForm" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <h2 id="dialogTitle">Novo lead</h2>
+            <p id="dialogSubtitle">Dados principais e proxima abordagem</p>
+          </div>
+          <button class="icon-button" type="button" id="closeDialogButton" title="Fechar" aria-label="Fechar">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+
+        <input id="leadId" type="hidden" />
+
+        <div class="form-grid">
+          <label>
+            Nome
+            <input id="leadName" name="name" required autocomplete="name" />
+          </label>
+          <label>
+            Telefone
+            <input id="leadPhone" name="phone" required inputmode="tel" autocomplete="tel" />
+          </label>
+          <label>
+            Estado da conversa
+            <select id="leadStatus" name="status" required></select>
+          </label>
+          <label>
+            Origem
+            <input id="leadSource" name="source" placeholder="Instagram, indicacao, trafego..." />
+          </label>
+          <label>
+            Valor potencial
+            <input id="leadValue" name="value" type="number" min="0" step="0.01" placeholder="0,00" />
+          </label>
+          <label>
+            Proximo contato
+            <input id="leadNextContact" name="nextContact" type="date" />
+          </label>
+          <label class="full">
+            Observacoes
+            <textarea id="leadNotes" name="notes" rows="3" placeholder="Contexto da conversa, dores, objeções, preferencias..."></textarea>
+          </label>
+          <label class="full">
+            Nova abordagem
+            <textarea id="leadInteraction" name="interaction" rows="2" placeholder="Ex.: Enviei proposta com desconto de 10%"></textarea>
+          </label>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="ghost-button danger" id="deleteLeadButton" type="button">Excluir</button>
+          <div>
+            <button class="ghost-button" type="button" id="cancelButton">Cancelar</button>
+            <button class="primary-button" type="submit">Salvar</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
