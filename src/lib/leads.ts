@@ -1,3 +1,5 @@
+import { UNDEFINED_AREA_SLUG } from "./areas";
+import { renderTemplate } from "./templates";
 import type { Lead, LeadStatus, SortMode } from "./types";
 
 export const STORAGE_KEY = "controle-leads:v1";
@@ -33,9 +35,30 @@ export function isTodayOrLate(value: string) {
   return value <= today;
 }
 
-export function whatsAppLink(phone: string) {
+/**
+ * Monta o link wa.me. Quando `message` é informada, é embutida como ?text=
+ * para o WhatsApp já abrir com a abordagem cadastrada.
+ */
+export function whatsAppLink(phone: string, message?: string) {
   const digits = String(phone || "").replace(/\D/g, "");
-  return digits ? `https://wa.me/55${digits.replace(/^55/, "")}` : "#";
+  if (!digits) return "#";
+  const base = `https://wa.me/55${digits.replace(/^55/, "")}`;
+  const trimmed = (message ?? "").trim();
+  if (!trimmed) return base;
+  return `${base}?text=${encodeURIComponent(trimmed)}`;
+}
+
+/**
+ * Estratégia para o lead: se for frio e tiver mensagem, usa a abordagem
+ * cadastrada. Caso contrário, comportamento legado (link sem texto).
+ */
+export function whatsAppLinkForLead(lead: Lead) {
+  if (lead.leadType === "frio" && lead.coldMessage) {
+    // Renderiza variáveis ({primeiro_nome} etc) antes de embutir.
+    const rendered = renderTemplate(lead.coldMessage, lead);
+    return whatsAppLink(lead.phone, rendered);
+  }
+  return whatsAppLink(lead.phone);
 }
 
 export function searchableText(lead: Lead) {
@@ -44,6 +67,8 @@ export function searchableText(lead: Lead) {
     lead.phone,
     lead.source,
     lead.notes,
+    lead.areaAtuacao,
+    lead.coldMessage ?? "",
     statusInfo(lead.status).label,
     ...(lead.interactions || []).map((item) => item.text),
   ]
@@ -60,6 +85,9 @@ export function seedLeads(): Lead[] {
       id: crypto.randomUUID(),
       name: "Maria Oliveira",
       phone: "(11) 99999-0000",
+      areaAtuacao: "estetica",
+      leadType: "normal",
+      coldMessage: "",
       status: "oferta-enviada",
       source: "Instagram",
       value: 1200,
@@ -73,6 +101,10 @@ export function seedLeads(): Lead[] {
       id: crypto.randomUUID(),
       name: "Carlos Mendes",
       phone: "(31) 98888-0000",
+      areaAtuacao: "advogados",
+      leadType: "frio",
+      coldMessage:
+        "Olá Carlos, vi que você atua na área jurídica. Posso te mostrar como tenho ajudado escritórios a captar mais clientes via WhatsApp?",
       status: "primeiro-contato",
       source: "Indicacao",
       value: 800,
@@ -97,3 +129,4 @@ export function sortLeads(leads: Lead[], sort: SortMode) {
   });
 }
 
+export { UNDEFINED_AREA_SLUG };

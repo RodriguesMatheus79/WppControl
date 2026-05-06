@@ -290,12 +290,397 @@ textarea:focus {
 
 .lead-card {
   display: grid;
-  grid-template-columns: minmax(180px, 1.15fr) minmax(130px, 0.85fr) minmax(120px, 0.7fr) minmax(150px, 0.8fr) auto;
+  grid-template-columns: minmax(180px, 1.15fr) minmax(160px, 1fr) minmax(120px, 0.7fr) minmax(150px, 0.8fr) auto;
   gap: 14px;
   align-items: center;
   padding: 16px 18px;
   border-bottom: 1px solid var(--line);
 }
+
+.lead-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #eef3f1;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip.area {
+  background: #f3eed8;
+  color: #6b5b1f;
+  border-color: #e3d8a1;
+}
+
+.chip .cold-mark {
+  font-size: 11px;
+  color: #1f6bbf;
+}
+
+.status-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fbfdfc;
+}
+
+.status-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.status-tab:hover {
+  border-color: #b8c4bf;
+  color: var(--ink);
+}
+
+.status-tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.status-tab .tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.status-tab.active .tab-count {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.status-chip.add-area {
+  border-style: dashed;
+  color: #a9bbb5;
+}
+
+.status-chip.add-area:hover {
+  color: #eef7f4;
+}
+
+.new-area-form {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+}
+
+.new-area-form input {
+  background: #1a2e2a;
+  color: #eef7f4;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.new-area-form input::placeholder {
+  color: #7d918a;
+}
+
+.new-area-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.new-area-actions .ghost-button {
+  flex: 1;
+  min-height: 36px;
+  font-size: 13px;
+  padding: 0 10px;
+}
+
+.area-field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.area-field .ghost-button {
+  min-height: 42px;
+  width: 42px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.area-create {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.area-create .ghost-button {
+  min-height: 42px;
+  font-size: 13px;
+}
+
+/* ===================== Painel de agenda ===================== */
+.agenda {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+
+.agenda header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.agenda h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.agenda header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.agenda-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.agenda-item {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.2fr) minmax(140px, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #f9fbfa;
+  border: 1px solid var(--line);
+}
+
+.agenda-item.overdue {
+  background: #fff4ed;
+  border-color: #f5d4b8;
+}
+
+.agenda-name {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  font-weight: 800;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--muted);
+}
+
+.agenda-meta,
+.agenda-when {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.agenda-when time {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ===================== Breakdown por área ===================== */
+.area-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.area-row {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.area-row:hover,
+.area-row.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.area-row strong {
+  font-size: 14px;
+}
+
+.area-row span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ===================== Modais (overlay) ===================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 19, 17, 0.52);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.overlay-card {
+  background: var(--panel);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 22px;
+  width: min(560px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.overlay-card-wide {
+  width: min(820px, 100%);
+}
+
+.overlay-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* ===================== Modal de duplicata ===================== */
+.dup-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.dup-compare > div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #f9fbfa;
+}
+
+.dup-compare h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dup-compare p {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+/* ===================== Templates ===================== */
+.template-picker {
+  margin-top: 6px;
+}
+
+.template-preview {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #eef7f4;
+  border: 1px dashed var(--accent);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.templates-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.templates-toolbar select {
+  max-width: 240px;
+}
+
+.templates-list {
+  display: grid;
+  gap: 12px;
+  max-height: 50vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.template-row {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  background: #f9fbfa;
+}
+
+.template-meta {
+  display: grid;
+  grid-template-columns: 1fr 200px auto;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 680px) {
+  .agenda-item {
+    grid-template-columns: 1fr auto;
+  }
+  .agenda-meta,
+  .agenda-when {
+    grid-column: 1 / -1;
+  }
+  .dup-compare {
+    grid-template-columns: 1fr;
+  }
+  .template-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 .lead-card:hover {
   background: #f9fbfa;
@@ -450,6 +835,15 @@ dialog::backdrop {
   .lead-card {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+
+  .lead-tags {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .status-tabs {
+    padding: 10px 12px;
   }
 }
 

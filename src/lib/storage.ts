@@ -1,5 +1,6 @@
-import type { Lead } from "./types";
+import type { Lead, LeadType } from "./types";
 import { seedLeads, STORAGE_KEY } from "./leads";
+import { UNDEFINED_AREA_SLUG } from "./areas";
 
 function safeParse(raw: string | null): unknown {
   if (!raw) return null;
@@ -10,15 +11,30 @@ function safeParse(raw: string | null): unknown {
   }
 }
 
+function normalizeLeadType(input: unknown): LeadType {
+  return input === "frio" ? "frio" : "normal";
+}
+
 function normalizeLead(input: any): Lead | null {
   if (!input || typeof input !== "object") return null;
   if (typeof input.id !== "string") return null;
 
   const interactions = Array.isArray(input.interactions) ? input.interactions : [];
+  const leadType = normalizeLeadType(input.leadType);
+  const coldMessageRaw = typeof input.coldMessage === "string" ? input.coldMessage : "";
+
   return {
     id: input.id,
     name: String(input.name ?? "").trim(),
     phone: String(input.phone ?? "").trim(),
+    // Campo novo: leads antigos não têm areaAtuacao — caem no slug "nao-definido"
+    // para que a sidebar agrupe sem perda de visibilidade.
+    areaAtuacao:
+      typeof input.areaAtuacao === "string" && input.areaAtuacao
+        ? input.areaAtuacao
+        : UNDEFINED_AREA_SLUG,
+    leadType,
+    coldMessage: coldMessageRaw,
     status: input.status,
     source: String(input.source ?? ""),
     value: Number(input.value ?? 0) || 0,
@@ -45,4 +61,3 @@ export function saveLeads(leads: Lead[]) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
 }
-
